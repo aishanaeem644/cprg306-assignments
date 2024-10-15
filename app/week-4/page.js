@@ -3,6 +3,8 @@
 import React, { useState } from 'react';
 
 const Page = () => {
+  const [name, setName] = useState(''); // Initialize name with an empty string
+  const [category, setCategory] = useState('Produce'); // Initialize category with "Produce"
   const [quantity, setQuantity] = useState(1); // Initialize quantity with 1
 
   // Function to increment quantity, ensuring it doesn't exceed 20
@@ -15,35 +17,58 @@ const Page = () => {
     setQuantity((prevQuantity) => (prevQuantity > 1 ? prevQuantity - 1 : prevQuantity));
   };
 
+  // Function to handle form submission
+  const handleSubmit = (e) => {
+    e.preventDefault(); // Prevent default form submission
+
+    // Create an item object with the current values
+    const item = {
+      name,
+      quantity,
+      category,
+    };
+
+    console.log(item); // Log the item object to the console
+    alert(`Added item Name: ${name}, Quantity: ${quantity}, Category: ${category}`); // Display alert with current values
+
+    // Reset the form fields
+    setName('');
+    setCategory('Produce');
+    setQuantity(1);
+  };
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-5">
-      <h1 className="text-3xl font-bold mb-5 text-black">Page with New Item</h1>
-      <p className="text-lg mb-3 text-black">
-        Current Quantity: <span className="font-semibold">{quantity}</span>
-      </p>
+      <div className="w-full max-w-md bg-white p-6 rounded shadow-md">
 
-      <div className="flex space-x-3 mb-5">
-        {/* Decrement button, disabled if quantity is 1 */}
-        <button
-          onClick={decrement}
-          disabled={quantity === 1}
-          className={`px-4 py-2 bg-red-500 text-white rounded ${
-            quantity === 1 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-red-600'
-          }`}
-        >
-          -
-        </button>
+        {/* Quantity Field */}
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-black">Quantity</label>
+          <div className="flex space-x-3">
+            {/* Decrement Button */}
+            <button
+              type="button"
+              onClick={decrement}
+              className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+              disabled={quantity === 1}
+            >
+              -
+            </button>
 
-        {/* Increment button, disabled if quantity is 20 */}
-        <button
-          onClick={increment}
-          disabled={quantity === 20}
-          className={`px-4 py-2 bg-green-500 text-white rounded ${
-            quantity === 20 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-green-600'
-          }`}
-        >
-          +
-        </button>
+            {/* Quantity Display */}
+            <span className="px-4 py-2 border rounded text-black">{quantity}</span>
+
+            {/* Increment Button */}
+            <button
+              type="button"
+              onClick={increment}
+              className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+              disabled={quantity === 20}
+            >
+              +
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

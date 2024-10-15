@@ -1,55 +1,52 @@
 "use client"; // Add this directive to indicate it's a client-side component
 
-import React, { useState } from 'react';
+import React from 'react';
 
-const NewItem = () => {
-  const [quantity, setQuantity] = useState(1); // Initialize quantity with 1
-
-  // Function to increment quantity, ensuring it doesn't exceed 20
-  const increment = () => {
-    setQuantity((prevQuantity) => (prevQuantity < 20 ? prevQuantity + 1 : prevQuantity));
-  };
-
-  // Function to decrement quantity, ensuring it doesn't go below 1
-  const decrement = () => {
-    setQuantity((prevQuantity) => (prevQuantity > 1 ? prevQuantity - 1 : prevQuantity));
-  };
-
+const NewItem = ({ name, setName, category, setCategory, handleSubmit }) => {
   return (
-    <div className>
-
-      {/* Original Quantity Display and Increment/Decrement Buttons */}
-      <p className="text-lg mb-3 text-black">
-        Current Quantity: <span className="font-semibold">{quantity}</span>
-      </p>
-
-      <div className="flex space-x-3 mb-5">
-        {/* Decrement button, disabled if quantity is 1 */}
-        <button
-          onClick={decrement}
-          disabled={quantity === 1}
-          className={`px-4 py-2 bg-red-500 text-white rounded ${
-            quantity === 1 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-red-600'
-          }`}
-        >
-          -
-        </button>
-
-        {/* Increment button, disabled if quantity is 20 */}
-        <button
-          onClick={increment}
-          disabled={quantity === 20}
-          className={`px-4 py-2 bg-green-500 text-white rounded ${
-            quantity === 20 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-green-600'
-          }`}
-        >
-          +
-        </button>
+    <form onSubmit={handleSubmit} className="w-full">
+      {/* Name Field */}
+      <div className="mb-4">
+        <label htmlFor="name" className="block text-sm font-medium text-black">
+          Name
+        </label>
+        <input
+          type="text"
+          id="name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+          className="mt-1 p-2 w-full border rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none text-black"
+          placeholder="Enter the item name"
+        />
       </div>
-    </div>
+
+      {/* Category Field */}
+      <div className="mb-4">
+        <label htmlFor="category" className="block text-sm font-medium text-black">
+          Category
+        </label>
+        <select
+          id="category"
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+          className="mt-1 p-2 w-full border rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none text-black"
+        >
+          <option value="Produce">Produce</option>
+          <option value="Dairy">Dairy</option>
+          <option value="Bakery">Bakery</option>
+          <option value="Meat">Meat</option>
+          <option value="Frozen Foods">Frozen Foods</option>
+          <option value="Canned Goods">Canned Goods</option>
+          <option value="Dry Goods">Dry Goods</option>
+          <option value="Beverages">Beverages</option>
+          <option value="Snacks">Snacks</option>
+          <option value="Household">Household</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+    </form>
   );
 };
 
 export default NewItem;
-
-

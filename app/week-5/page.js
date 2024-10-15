@@ -8,6 +8,16 @@ const Page = () => {
   const [category, setCategory] = useState('Produce'); // Initialize category with "Produce"
   const [quantity, setQuantity] = useState(1); // Initialize quantity with 1
 
+  // Function to increment quantity, ensuring it doesn't exceed 20
+  const increment = () => {
+    setQuantity((prevQuantity) => (prevQuantity < 20 ? prevQuantity + 1 : prevQuantity));
+  };
+
+  // Function to decrement quantity, ensuring it doesn't go below 1
+  const decrement = () => {
+    setQuantity((prevQuantity) => (prevQuantity > 1 ? prevQuantity - 1 : prevQuantity));
+  };
+
   // Function to handle form submission
   const handleSubmit = (e) => {
     e.preventDefault(); // Prevent default form submission
@@ -30,63 +40,55 @@ const Page = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-5">
-      <form onSubmit={handleSubmit} className="w-full max-w-md bg-white p-6 rounded shadow-md">
-      <h1 className="text-3xl font-bold mb-5 text-black">Page with New Item</h1>
-        {/* Name Field */}
-        <div className="mb-4">
-          <label htmlFor="name" className="block text-sm font-medium text-black">
-            Name
-          </label>
-          <input
-            type="text"
-            id="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-            className="mt-1 p-2 w-full border rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none text-black"
-            placeholder="Enter the item name"
-          />
-        </div>
-
-        {/* Category Field */}
-        <div className="mb-4">
-          <label htmlFor="category" className="block text-sm font-medium text-black">
-            Category
-          </label>
-          <select
-            id="category"
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            className="mt-1 p-2 w-full border rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none text-black"
-          >
-            <option value="Produce">Produce</option>
-            <option value="Dairy">Dairy</option>
-            <option value="Bakery">Bakery</option>
-            <option value="Meat">Meat</option>
-            <option value="Frozen Foods">Frozen Foods</option>
-            <option value="Canned Goods">Canned Goods</option>
-            <option value="Dry Goods">Dry Goods</option>
-            <option value="Beverages">Beverages</option>
-            <option value="Snacks">Snacks</option>
-            <option value="Household">Household</option>
-            <option value="Other">Other</option>
-          </select>
-        </div>
+      <div className="w-full max-w-md bg-white p-6 rounded shadow-md">
+        {/* Render NewItem Component */}
+        <NewItem
+          name={name}
+          setName={setName}
+          category={category}
+          setCategory={setCategory}
+          handleSubmit={handleSubmit}
+        />
 
         {/* Quantity Field */}
-          <NewItem />
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-black">Quantity</label>
+          <div className="flex space-x-3">
+            {/* Decrement Button */}
+            <button
+              type="button"
+              onClick={decrement}
+              className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+              disabled={quantity === 1}
+            >
+              -
+            </button>
+
+            {/* Quantity Display */}
+            <span className="px-4 py-2 border rounded text-black">{quantity}</span>
+
+            {/* Increment Button */}
+            <button
+              type="button"
+              onClick={increment}
+              className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+              disabled={quantity === 20}
+            >
+              +
+            </button>
+          </div>
+        </div>
 
         {/* Submit Button */}
         <button
-          type="submit"
-          className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+          onClick={handleSubmit}
+          className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 mt-4"
         >
           Add Item
         </button>
-      </form>
+      </div>
     </div>
   );
 };
 
 export default Page;
-
