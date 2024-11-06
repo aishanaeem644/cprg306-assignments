@@ -13,3 +13,6 @@ const Item = ({ name, quantity, category }) => {
 };
 
 export default Item;
+
+
+

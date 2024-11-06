@@ -1,14 +1,17 @@
+// page.js
+
 "use client";
 
 import React, { useState } from 'react';
 import ItemList from './item-list'; 
 import NewItem from './new-item';
+import MealIdeas from './meal-ideas';
 import itemsData from './items.json';
 
 const Page = () => {
   // Initialize state variables
   const [items, setItems] = useState(itemsData);
-  const [setSelectedItemName] = useState('');
+  const [selectedItemName, setSelectedItemName] = useState('');
 
   // Event handler to add a new item
   const handleAddItem = (newItem) => {
@@ -29,12 +32,17 @@ const Page = () => {
       <div className="max-w-4xl mx-auto flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
         
         {/* Left side - NewItem and ItemList components */}
-        <div className="flex flex-col items-center justify-center bg-white p-5 w-1/2 rounded-lg shadow-md"> {/* Adjust width to half */}
+        <div className="flex flex-col items-center justify-center bg-white p-5 flex-1 rounded-lg shadow-md">
           <h1 className="text-3xl font-bold text-center text-gray-900">Shopping List</h1>
           <NewItem onAddItem={handleAddItem} />
           <div className="text-white">/break</div>
 
           <ItemList items={items} onItemSelect={handleItemSelect} />
+        </div>
+        
+        {/* Right side - MealIdeas component */}
+        <div className="flex-1">
+          <MealIdeas ingredient={selectedItemName} />
         </div>
       </div>
     </main>
