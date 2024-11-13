@@ -3,24 +3,12 @@
 "use client";
 
 import React, { useState } from 'react';
-import { useUserAuth } from './_utils/auth-context'; // Import the authentication context
-import { useNavigate } from 'react-router-dom';
 import ItemList from './item-list'; 
 import NewItem from './new-item';
 import MealIdeas from './meal-ideas';
 import itemsData from './items.json';
 
 const Page = () => {
-  // Destructure user from useUserAuth to check login status
-  const { user } = useUserAuth();
-  const navigate = useNavigate();
-
-  // Redirect to login page if user is not authenticated
-  if (!user) {
-    navigate("/login"); // Adjust the route as needed
-    return null; // Prevent the component from rendering if the user is not logged in
-  }
-
   // Initialize state variables
   const [items, setItems] = useState(itemsData);
   const [selectedItemName, setSelectedItemName] = useState('');

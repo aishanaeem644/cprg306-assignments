@@ -1,65 +1,51 @@
-// page.js
-
 "use client";
 
-import React, { useEffect } from 'react';
-import { useRouter } from 'next/navigation'; // Next.js useRouter hook
+import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useUserAuth } from './_utils/auth-context'; // Import the authentication context
-import ItemList from './shopping-list/item-list'; 
-import NewItem from './shopping-list/new-item';
-import MealIdeas from './shopping-list/meal-ideas';
-import itemsData from './shopping-list/items.json';
 
 const Page = () => {
-  // Destructure user from useUserAuth to check login status
-  const { user } = useUserAuth();
+  const { user, gitHubSignIn, firebaseSignOut } = useUserAuth();
   const router = useRouter();
 
-  // Redirect to login page if user is not authenticated
-  useEffect(() => {
-    if (!user) {
-      router.push('/login'); // Redirect to the login page
-    }
-  }, [user, router]);
-
-  // If the user is not logged in, don't render the page
-  if (!user) return null;
-
-  // Initialize state variables
-  const [items, setItems] = React.useState(itemsData);
-  const [selectedItemName, setSelectedItemName] = React.useState('');
-
-  // Event handler to add a new item
-  const handleAddItem = (newItem) => {
-    setItems((prevItems) => [...prevItems, newItem]);
-  };
-
-  // Event handler to handle item selection and clean up the name
-  const handleItemSelect = (item) => {
-    const cleanedName = item.name
-      .split(',')[0]  // Take only the part before a comma
-      .replace(/([\u2700-\u27BF]|[\uE000-\uF8FF]|[\u2011-\u26FF])/g, '') // Remove emojis
-      .trim(); // Trim any extra whitespace
-    setSelectedItemName(cleanedName);
-  };
+  // If the user is not logged in, prompt them to log in with GitHub
+  if (!user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100 p-6">
+        <div className="max-w-md p-6 bg-white rounded-lg shadow-md text-center">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Shopping List App</h2>
+          <button
+            onClick={gitHubSignIn}
+            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+          >
+            Sign in with GitHub
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <main className="min-h-screen bg-gray-100 p-6">
-      <div className="max-w-4xl mx-auto flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
-        
-        {/* Left side - NewItem and ItemList components */}
-        <div className="flex flex-col items-center justify-center bg-white p-5 flex-1 rounded-lg shadow-md">
-          <h1 className="text-3xl font-bold text-center text-gray-900">Shopping List</h1>
-          <NewItem onAddItem={handleAddItem} />
-          <div className="text-white">/break</div>
+    <main className="min-h-screen bg-gray-100 p-6 flex flex-col items-center">
+      <div className="max-w-md p-6 bg-white rounded-lg shadow-md text-center">
+        <h2 className="text-2xl font-bold text-gray-900 mb-4">Shopping List App</h2>
+        <p className="mb-4 text-gray-900">Signed in  {user.displayName}</p>
 
-          <ItemList items={items} onItemSelect={handleItemSelect} />
-        </div>
-        
-        {/* Right side - MealIdeas component */}
-        <div className="flex-1">
-          <MealIdeas ingredient={selectedItemName} />
-        </div>
+        {/* Sign Out Button */}
+        <button
+          onClick={firebaseSignOut}
+          className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 mb-4"
+        >
+          Sign out
+        </button>
+
+        {/* Continue to Shopping List Button */}
+        <button
+          onClick={() => router.push('/week-9/shopping-list')}
+          className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+        >
+          Continue to your Shopping List
+        </button>
       </div>
     </main>
   );
