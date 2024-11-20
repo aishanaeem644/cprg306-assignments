@@ -41,7 +41,7 @@ const Page = () => {
 
         {/* Continue to Shopping List Button */}
         <button
-          onClick={() => router.push('/week-9/shopping-list')}
+          onClick={() => router.push('/week-10/shopping-list')}
           className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
         >
           Continue to your Shopping List

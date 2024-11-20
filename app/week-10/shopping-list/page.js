@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { getItems, addItem } from '../shopping-list-service';
+import { getItems, addItem } from '@/app/week-10/_services/shopping-list-service';
 import ItemList from './item-list'; 
 import NewItem from './new-item';
 import MealIdeas from './meal-ideas';
@@ -13,30 +13,24 @@ const Page = ({ user }) => {
   // Load the shopping list items for the current user
   const loadItems = async () => {
     try {
-      const userItems = await getItems(user.uid); // Replace user.uid with the actual user ID
+      const userItems = await getItems(user.uid); // Fetch items using user ID
       setItems(userItems);
     } catch (error) {
       console.error("Error loading items:", error);
     }
   };
 
-  // Fetch items when the component is mounted
+  // Fetch items when the component is mounted or when user changes
   useEffect(() => {
     if (user && user.uid) {
       loadItems();
     }
   }, [user]); // Re-run if the user changes
-
-  // Event handler to add a new item
-  const handleAddItem = async (newItem) => {
-    try {
-      const newItemId = await addItem(user.uid, newItem); // Add the item to Firestore
-      const itemWithId = { ...newItem, id: newItemId };
-      setItems((prevItems) => [...prevItems, itemWithId]); // Update the state
-    } catch (error) {
-      console.error("Error adding item:", error);
-    }
-  };
+  
+    // Event handler to add a new item
+    const handleAddItem = (newItem) => {
+      setItems((prevItems) => [...prevItems, newItem]);
+    };
 
   // Event handler to handle item selection and clean up the name
   const handleItemSelect = (item) => {
@@ -54,7 +48,7 @@ const Page = ({ user }) => {
         {/* Left side - NewItem and ItemList components */}
         <div className="flex flex-col items-center justify-center bg-white p-5 flex-1 rounded-lg shadow-md">
           <h1 className="text-3xl font-bold text-center text-gray-900">Shopping List</h1>
-          <NewItem onAddItem={handleAddItem} />
+          <NewItem onAddItem={handleAddItem} /> {/* Trigger adding item */}
           <div className="text-white">/break</div>
 
           <ItemList items={items} onItemSelect={handleItemSelect} />
@@ -62,7 +56,7 @@ const Page = ({ user }) => {
         
         {/* Right side - MealIdeas component */}
         <div className="flex-1">
-          <MealIdeas ingredient={selectedItemName} />
+          <MealIdeas ingredient={selectedItemName} /> {/* Display meal ideas based on selected item */}
         </div>
       </div>
     </main>
